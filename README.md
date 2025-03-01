@@ -23,5 +23,5 @@
 ## Instalación y Uso 🚀
 1. **Clona el repositorio:**
    ```bash
-   git clone https://github.com/tu_usuario/djangojavascript.git
+   git clone https://github.com/Vitio123/DjangoJavascript.git
 
