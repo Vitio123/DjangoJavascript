@@ -7,8 +7,16 @@ import MyTextField from "./form/MyTextField";
 import { useForm } from "react-hook-form";
 
 export default function Create() {
-  const { handleSubmit, reset, setValue, control } = useForm();
-
+  const { handleSubmit, reset, setValue, control } = useForm({
+    defaultValues: DefaultValues,
+  });
+  const DefaultValues = {
+    name: "",
+    comments: "",
+    status: "",
+    start_date: "",
+    end_date: "",
+  };
   const submission = (data) => console.log(data);
   return (
     <div>
