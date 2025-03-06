@@ -37,6 +37,11 @@ export default function Home() {
         accessorKey: "status",
         header: "Status",
         size: 150,
+        Cell: ({ cell }) => {
+          const rawValue = cell.getValue();
+          const displayValue = rawValue.replaceAll("_", " ");
+          return displayValue;
+        },
       },
       {
         accessorKey: "comments",
