@@ -8,6 +8,7 @@ import Dayjs from "dayjs";
 import { Box, IconButton } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { PuffLoader } from "react-spinners";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [myData, setMyData] = useState([]);
@@ -64,6 +65,8 @@ export default function Home() {
       <Box sx={{ display: "flex", gap: "8px" }}>
         <IconButton
           color="secondary"
+          component={Link}
+          to={`edit/${row.original.id}`}
           onClick={() => console.log("Editar", row.original)}
         >
           <EditIcon />
