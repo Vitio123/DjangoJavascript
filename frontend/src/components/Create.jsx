@@ -5,11 +5,13 @@ import MyMultilineField from "./form/MyMultilineField";
 import MySelectField from "./form/MySelectField";
 import MyTextField from "./form/MyTextField";
 import { useForm } from "react-hook-form";
+import AxiosInstance from "./Axios";
+import Dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 export default function Create() {
-  const { handleSubmit, reset, setValue, control } = useForm({
-    defaultValues: DefaultValues,
-  });
+  const navigate = useNavigate();
+
   const DefaultValues = {
     name: "",
     comments: "",
@@ -17,7 +19,33 @@ export default function Create() {
     start_date: "",
     end_date: "",
   };
-  const submission = (data) => console.log(data);
+
+  const { handleSubmit, control } = useForm({
+    defaultValues: DefaultValues,
+  });
+
+  const submission = (data) => {
+    const StartDate = Dayjs(data.start_date["$d"]).format("YYYY-MM-DD");
+    const EndDate = Dayjs(data.end_date["$d"]).format("YYYY-MM-DD");
+
+    AxiosInstance.post(`project/`, {
+      name: data.name,
+      comments: data.comments,
+      status: data.status,
+      start_date: StartDate,
+      end_date: EndDate,
+    })
+      .then((response) => {
+        console.log("Project created successfully:", response.data);
+        navigate(`/`);
+      })
+      .catch((error) => {
+        console.error(
+          "There was an error creating the project:",
+          error.response.data
+        );
+      });
+  };
   return (
     <div>
       <form onSubmit={handleSubmit(submission)}>
