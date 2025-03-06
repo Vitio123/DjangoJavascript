@@ -7,6 +7,7 @@ import {
 import Dayjs from "dayjs";
 import { Box, IconButton } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { PuffLoader } from "react-spinners";
 
 export default function Home() {
   const [myData, setMyData] = useState([]);
@@ -79,7 +80,20 @@ export default function Home() {
 
   return (
     <div>
-      {loading ? <p>Loading data...</p> : <MaterialReactTable table={table} />}
+      {loading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "50vh",
+          }}
+        >
+          <PuffLoader color="blue" size={80} />
+        </div>
+      ) : (
+        <MaterialReactTable table={table} />
+      )}
     </div>
   );
 }
