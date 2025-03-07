@@ -14,11 +14,13 @@ def home(request):
 
 class ProjectViewset(viewsets.ViewSet):
     permission_classes = [permissions.AllowAny]
-    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
+    def get_queryset(self):
+        return Project.objects.all()
+
     def list(self, request):
-        queryset = self.queryset
+        queryset = self.get_queryset()
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
@@ -31,12 +33,12 @@ class ProjectViewset(viewsets.ViewSet):
             return Response(serializer.errors, status=400)
 
     def retrieve(self, request, pk=None):
-        project = self.queryset.get(pk=pk)
+        project = self.get_queryset().get(pk=pk)
         serializer = self.serializer_class(project)
         return Response(serializer.data)
 
     def update(self, request, pk=None):
-        project = self.queryset.get(pk=pk)
+        project = self.get_queryset().get(pk=pk)
         serializer = self.serializer_class(project, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -45,6 +47,6 @@ class ProjectViewset(viewsets.ViewSet):
             return Response(serializer.errors, status=400)
 
     def destroy(self, request, pk=None):
-        project = self.queryset.get(pk=pk)
+        project = self.get_queryset().get(pk=pk)
         project.delete()
         return Response(status=204)

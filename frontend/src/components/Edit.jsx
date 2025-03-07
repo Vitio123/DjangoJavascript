@@ -57,7 +57,7 @@ export default function Edit() {
     })
       .then((response) => {
         console.log("Project created successfully:", response.data);
-        navigate(`/`);
+        navigate(`/`, { state: { refresh: true } });
       })
       .catch((error) => {
         console.error(

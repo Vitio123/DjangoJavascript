@@ -9,10 +9,12 @@ import { Box, IconButton } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { PuffLoader } from "react-spinners";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function Home() {
   const [myData, setMyData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
   const GetData = () => {
     AxiosInstance.get(`project/`).then((res) => {
@@ -24,7 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     GetData();
-  }, []);
+  }, [location.state]);
 
   const columns = useMemo(
     () => [
