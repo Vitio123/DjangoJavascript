@@ -74,13 +74,13 @@ export default function Home() {
           color="secondary"
           component={Link}
           to={`edit/${row.original.id}`}
-          onClick={() => console.log("Editar", row.original)}
         >
           <EditIcon />
         </IconButton>
         <IconButton
           color="error"
-          onClick={() => console.log("Eliminar", row.original)}
+          component={Link}
+          to={`delete/${row.original.id}`}
         >
           <DeleteIcon />
         </IconButton>
