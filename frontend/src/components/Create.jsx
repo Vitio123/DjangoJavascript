@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import AxiosInstance from "./Axios";
 import Dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 export default function Create() {
   const navigate = useNavigate();
@@ -20,8 +22,22 @@ export default function Create() {
     end_date: "",
   };
 
+  const schema = yup
+    .object({
+      name: yup.string().required("Name is required field"),
+      status: yup.string().required("Status is required field"),
+      comments: yup.string(),
+      start_date: yup.date().required("Start date is required field"),
+      end_date: yup
+        .date()
+        .required("End date is required field")
+        .min(yup.ref("start_date"), "End date must be after start date"),
+    })
+    .required();
+
   const { handleSubmit, control } = useForm({
     defaultValues: DefaultValues,
+    resolver: yupResolver(schema),
   });
 
   const submission = (data) => {

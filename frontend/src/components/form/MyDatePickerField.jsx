@@ -18,7 +18,7 @@ export default function MyDatePickerField({ label, control, name, width }) {
               textField: {
                 sx: { width }, // Estilo aquí
                 error: !!error,
-                helperText: error ? error.message : "",
+                helperText: error?.message,
               },
             }}
           />
