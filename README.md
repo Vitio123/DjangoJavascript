@@ -45,4 +45,4 @@ Es tu asistente personal para:
 
 1. Clona este repositorio como un rockstar:  
    ```bash
-   git clone https://github.com/tu-usuario/project-manager-pro.git
+   git clone https://github.com/tu-usuario/project-manager-pro.git](https://github.com/Vitio123/DjangoJavascript
