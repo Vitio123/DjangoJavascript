@@ -1,4 +1,4 @@
-import { React, useEffect } from "react";
+import { React, useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import MyDatePickerField from "./form/MyDatePickerField";
 import MyMultilineField from "./form/MyMultilineField";
@@ -8,21 +8,35 @@ import { useForm } from "react-hook-form";
 import AxiosInstance from "./Axios";
 import Dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
+import { PuffLoader } from "react-spinners";
 
 export default function Edit() {
   const MyParam = useParams();
   const MyID = MyParam.id;
-  // const [loading, setLoading] = useState(true);
+  const [projectmanager, setProjectmanager] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const hardcode_options = [
+    { id: "open", name: "Open" },
+    { id: "in_progress", name: "In Progress" },
+    { id: "completed", name: "Completed" },
+  ];
 
   const GetData = () => {
+    AxiosInstance.get(`projectmanager/`).then((res) => {
+      setProjectmanager(res.data);
+      // console.log(res.data);
+    });
+
     AxiosInstance.get(`project/${MyID}`).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setValue("name", res.data.name);
       setValue("comments", res.data.comments);
+      setValue("projectmanager", res.data.projectmanager);
       setValue("status", res.data.status.toLowerCase());
       setValue("start_date", Dayjs(res.data.start_date));
       setValue("end_date", Dayjs(res.data.end_date));
-      // setLoading(false);
+      setLoading(false);
     });
   };
 
@@ -36,6 +50,7 @@ export default function Edit() {
     name: "",
     comments: "",
     status: "",
+    projectmanager: "",
     start_date: "",
     end_date: "",
   };
@@ -52,101 +67,129 @@ export default function Edit() {
       name: data.name,
       comments: data.comments,
       status: data.status,
+      projectmanager: data.projectmanager,
       start_date: StartDate,
       end_date: EndDate,
     })
       .then((response) => {
-        console.log("Project created successfully:", response.data);
+        console.log("Project updated successfully:", response.data);
         navigate(`/`, { state: { refresh: true } });
       })
       .catch((error) => {
         console.error(
-          "There was an error creating the project:",
+          "There was an error updating the project:",
           error.response.data
         );
       });
   };
   return (
     <div>
-      <form onSubmit={handleSubmit(submission)}>
-        <Box
-          sx={{
+      {loading ? (
+        <div
+          style={{
             display: "flex",
-            width: "100%",
-            background: "#00003f",
-            marginBottom: "10px",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "50vh",
           }}
         >
-          <Typography sx={{ marginLeft: "20px", color: "#fff" }}>
-            Edit record
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            width: "100%",
-            boxShadow: 3,
-            padding: 4,
-            flexDirection: "column",
-            marginBottom: "40px",
-          }}
-        >
+          <PuffLoader color="blue" size={80} />
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit(submission)}>
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-around",
+              width: "100%",
+              background: "#00003f",
               marginBottom: "10px",
             }}
           >
-            <MyTextField
-              label="Start date"
-              name="name"
-              control={control}
-              placeholder="Provide a project name"
-              width={"30%"}
-            />
-            <MyDatePickerField
-              label="Start date"
-              name="start_date"
-              control={control}
-              width={"30%"}
-            />
-            <MyDatePickerField
-              label="End date"
-              name="end_date"
-              control={control}
-              width={"30%"}
-            />
+            <Typography sx={{ marginLeft: "20px", color: "#fff" }}>
+              Edit record
+            </Typography>
           </Box>
+
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-around",
+              width: "100%",
+              boxShadow: 3,
+              padding: 4,
+              flexDirection: "column",
+              marginBottom: "40px",
             }}
           >
-            <MyMultilineField
-              label="Comments"
-              name="comments"
-              control={control}
-              placeholder="Provide a project comments"
-              width={"30%"}
-            />
-            <MySelectField
-              label="Status"
-              name="status"
-              control={control}
-              width={"30%"}
-            />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginBottom: "10px",
+              }}
+            >
+              <MyTextField
+                label="Project Name"
+                name="name"
+                control={control}
+                placeholder="Provide a project name"
+                width={"30%"}
+              />
+              <MyDatePickerField
+                label="Start date"
+                name="start_date"
+                control={control}
+                width={"30%"}
+              />
+              <MyDatePickerField
+                label="End date"
+                name="end_date"
+                control={control}
+                width={"30%"}
+              />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+              }}
+            >
+              <MyMultilineField
+                label="Comments"
+                name="comments"
+                control={control}
+                placeholder="Provide a project comments"
+                width={"30%"}
+              />
+              <MySelectField
+                label="Status"
+                name="status"
+                control={control}
+                width={"30%"}
+                options={hardcode_options}
+              />
 
-            <Box sx={{ width: "30%" }}>
-              <Button variant="contained" type="submit" sx={{ width: "100%" }}>
+              <MySelectField
+                label="Project Manager"
+                name="projectmanager"
+                control={control}
+                width={"30%"}
+                options={projectmanager}
+              />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "start",
+                marginTop: "40px",
+              }}
+            >
+              <Button variant="contained" type="submit" sx={{ width: "30%" }}>
                 Submit
               </Button>
             </Box>
           </Box>
-        </Box>
-      </form>
+        </form>
+      )}
     </div>
   );
 }

@@ -10,11 +10,7 @@ export default function MySelectField({
   label,
   name,
   control,
-  options = [
-    { value: "open", label: "Open" },
-    { value: "in_progress", label: "In Progress" },
-    { value: "completed", label: "Completed" },
-  ],
+  options,
 }) {
   return (
     <Controller
@@ -25,8 +21,8 @@ export default function MySelectField({
           <InputLabel>{label}</InputLabel>
           <Select value={value} onChange={onChange} error={!!error}>
             {options.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
+              <MenuItem key={option.id} value={option.id}>
+                {option.name}
               </MenuItem>
             ))}
           </Select>

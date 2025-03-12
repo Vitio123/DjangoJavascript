@@ -8,8 +8,19 @@ from rest_framework.response import Response
 # Create your views here.
 
 
-def home(request):
-    return HttpResponse("This is the homepage")
+# def home(request):
+#     return HttpResponse("This is the homepage")
+
+
+class ProjectManagerViewset(viewsets.ViewSet):
+    permissions_classes = [permissions.AllowAny]
+    queryset = ProjectManager.objects.all()
+    serializer_class = ProjectManagerSerializer
+
+    def list(self, request):
+        queryset = ProjectManager.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
 
 class ProjectViewset(viewsets.ViewSet):
